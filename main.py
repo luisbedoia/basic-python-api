@@ -25,19 +25,13 @@ def get_steps(user:str):
 
 @app.websocket("/ws")
 async def websocket(websocket: WebSocket):
-    await websocket.accept()
-    await websocket.send_json({"msg": "Hello WebSocket"})
-    await websocket.close()
-
-@app.websocket("/ws/update")
-async def websocket(websocket: WebSocket):
     print("WS connection started")
     await websocket.accept()
+    await websocket.send_json("connected")
     while True:
         try:            
             data = await websocket.receive_text()
             data = json.loads(data)
-            print("New message")
             app.step.add(data['username'],data['ts'],data['newSteps'])
         except Exception as e:
             print('error:', e)
