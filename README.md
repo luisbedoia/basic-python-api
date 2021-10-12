@@ -1,5 +1,9 @@
 # Step Tracking Server
 
+git clone https://github.com/luisbedoia/basic-python-api.git
+
+cd basic-python-api
+
 python3 -m virtualenv python-api
 
 source python-api/bin/activate
