@@ -1,39 +1,17 @@
-from typing import Optional
-from fastapi import FastAPI, HTTPException, WebSocket
-from step import StepService
-from spec.store import testStore
-import json
+from fastapi import FastAPI
+from routes.user import User
+from config.db import connectToDatabase
+from config.createSchema import createSchema
+from tortoise.contrib.fastapi import HTTPNotFoundError, register_tortoise
 
-store = testStore
-service = StepService(store)
 
 app = FastAPI()
-app.step = service
+app.include_router(User)
 
-@app.get("/")
-def read_root():
-    return {"msg": "Hello World"}
-
-
-@app.get("/users/{user}/steps")
-def get_steps(user:str):
-    response = app.step.get(user)
-    if response == None:
-        raise HTTPException(status_code=404, detail="User doesn't exist")
-    else:
-        return response
-
-@app.websocket("/ws")
-async def websocket(websocket: WebSocket):
-    print("WS connection started")
-    await websocket.accept()
-    await websocket.send_json("connected")
-    while True:
-        try:            
-            data = await websocket.receive_text()
-            data = json.loads(data)
-            app.step.add(data['username'],data['ts'],data['newSteps'])
-        except Exception as e:
-            print('error:', e)
-            break
-    print('Bye..')
+register_tortoise(
+    app,
+    db_url="postgres://bob:admin@127.0.0.1:5432/test",
+    modules={"models": ["models.user"]},
+    generate_schemas=True,
+    add_exception_handlers=True,
+)
