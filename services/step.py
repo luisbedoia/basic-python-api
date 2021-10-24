@@ -1,4 +1,4 @@
-from models.user import User_Pydantic, UserIn_Pydantic, Users
+from models.user import user, user_in, users 
 class StepService:
     def __init__(self, store: dict):
         self.store = store
@@ -27,28 +27,28 @@ class StepService:
             return False
 
 class StepService2:
-    def __init__(self, Users:Users):
-        self.Users = Users
+    def __init__(self, User:users):
+        self.User = users
 
-    async def get(self, username: str):
+    async def get(self, username: str) -> user or None:
         '''If user exist, returns the user info object, else returns None'''
-        user_username = await self.Users.filter(username=username).first()
+        user_username = await self.User.filter(username=username).first()
         if user_username:
             return user_username
         else:
             return None
 
-    async def add(self, username: str, ts: float, newSteps: int):
+    async def add(self, username: str, ts: float, newSteps: int) -> bool:
         '''If user exists, replace its timestamp ts and add newSteps to cumulativeSteps, else inserts a new user with incoming data'''
         if username and ts and newSteps:
-            user_username = await self.Users.filter(username=username).first()
+            user_username = await self.User.filter(username=username).first()
             if user_username:
                 update = {
                     'username': username,
                     'ts': ts,
                     'cumulativeSteps': user_username.cumulativeSteps + newSteps
                 }
-                await self.Users.filter(username=username).update(**update)
+                await self.User.filter(username=username).update(**update)
                 return True
             else:
                 user = {
@@ -56,7 +56,7 @@ class StepService2:
                     'ts': ts,
                     'cumulativeSteps': newSteps
                 }
-                new_user = await self.Users.create(**user)
+                new_user = await self.User.create(**user)
                 return True
         else:
             return False

@@ -4,11 +4,11 @@ from spec.store import testStore
 import json
 import copy
 
-from models.user import User_Pydantic, UserIn_Pydantic, Users
+from models.user import user, user_in, users
 
 store = copy.deepcopy(testStore)
 service = StepService(store)
-service2 = StepService2(Users)
+service2 = StepService2(users)
 
 User = APIRouter()
 

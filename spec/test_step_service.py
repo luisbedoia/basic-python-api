@@ -1,7 +1,7 @@
 import pytest
 import time
 from spec.store import testStore
-from step import StepService
+from services.step import StepService
 import copy
 
 store = copy.deepcopy(testStore)
