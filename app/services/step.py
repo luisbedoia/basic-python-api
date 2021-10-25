@@ -1,4 +1,4 @@
-from models.user import user, user_in, users 
+from app.models.user import user, user_in, users 
 class StepService:
     def __init__(self, store: dict):
         self.store = store

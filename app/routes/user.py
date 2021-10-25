@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, WebSocket
-from services.step import StepService, StepService2
-from spec.store import testStore
+from app.services.step import StepService, StepService2
+from app.spec.store import testStore
 import json
 import copy
 
-from models.user import user, user_in, users
+from app.models.user import user, user_in, users
 
 store = copy.deepcopy(testStore)
 service = StepService(store)
