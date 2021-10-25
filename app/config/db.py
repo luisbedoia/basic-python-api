@@ -30,4 +30,3 @@ async def connectToDatabase():
             },
         }
     )
-# asyncio.run(connectToDatabase())
