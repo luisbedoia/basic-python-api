@@ -17,3 +17,5 @@ python3 -m pytest -s spec/test_ws_api.py
 python3 -m uvicorn main:app --reload --port 8001
 
 pip freeze > requirements.txt
+
+docker-compose up --build --force-recreate
