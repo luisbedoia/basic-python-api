@@ -3,6 +3,7 @@ version: "3.8"
 services:
   db:
     image: postgres:latest
+    network_mode: "host"
     ports:
     - 5432:5432
     environment:
@@ -12,10 +13,11 @@ services:
         - ./init.sql:/docker-entrypoint-initdb.d/init.sql
   
   api:
+    network_mode: "host"
     build:
       context: .
     ports:
-      - 8002:8000
+      - 8002:8002
     volumes:
       - ./:/app
     links:

@@ -8,4 +8,4 @@ RUN python3 -m pip install tortoise-orm
 
 COPY . .
 
-CMD ["uvicorn" , "app.main:app", "--reload", "--port","8000"]
+CMD ["uvicorn" , "app.main:app", "--reload", "--port","8002"]
