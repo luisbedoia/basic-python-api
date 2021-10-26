@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:latest
+    network_mode: "host"
+    ports:
+    - 5432:5432
+    environment:
+      - POSTGRES_USER=bob
+      - POSTGRES_PASSWORD=bob
+    volumes:
+        - ./init.test.sql:/docker-entrypoint-initdb.d/init.test.sql
+    healthcheck:
+      test: ["CMD-SHELL", "psql -U bob -t -d users -c 'SELECT ID FROM users WHERE id=2'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  api:
+    network_mode: "host"
+    build:
+      dockerfile: dockerfile.test
+      context: .
+    ports:
+      - 8002:8002
+    volumes:
+      - ./:/app
+    links:
+      - "db:database"
+    depends_on:
+      db:
+        condition: service_healthy
